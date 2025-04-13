@@ -6,10 +6,30 @@ export default function NewPostPage() {
   const [content, setContent] = useState('')
 
   const handleGenerate = async () => {
-    // Eventually this will call OpenAI API
-    // For now, mock content
-    setContent(`This is a sample blog post about: "${topic}"`)
+    setContent('') // Clear previous content
+  
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ topic }),
+      })
+  
+      const data = await response.json()
+  
+      if (response.ok && data.content) {
+        setContent(data.content)
+      } else {
+        setContent('⚠️ Failed to generate content. Please try again.')
+      }
+    } catch (error) {
+      console.error('Error generating blog post:', error)
+      setContent('⚠️ Something went wrong while calling the API.')
+    }
   }
+  
 
   return (
     <>
