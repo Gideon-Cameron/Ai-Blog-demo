@@ -26,7 +26,7 @@ export default function NewPostPage() {
       }
     } catch (error) {
       console.error('Error generating blog post:', error)
-      setContent('⚠️ Something went wrong while calling the API.')
+      setContent('⚠️ Something went wrong while calling the API!')
     }
   }
   
