@@ -20,12 +20,14 @@ export default function NewPostPage() {
       const data = await response.json()
   
       if (response.ok && data.content) {
+        console.log('✅ Blog generated successfully')
         setContent(data.content)
       } else {
+        console.warn('⚠️ API responded but no content was returned:', data)
         setContent('⚠️ Failed to generate content. Please try again.')
       }
     } catch (error) {
-      console.error('Error generating blog post:', error)
+      console.error('❌ API request failed:', error)
       setContent('⚠️ Something went wrong while calling the API!')
     }
   }
