@@ -4,10 +4,12 @@ import Navbar from '@components/Navbar'
 export default function NewPostPage() {
   const [topic, setTopic] = useState('')
   const [content, setContent] = useState('')
+  const [status, setStatus] = useState('') // for publish feedback
 
   const handleGenerate = async () => {
-    setContent('') // Clear previous content
-  
+    setContent('')
+    setStatus('')
+
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
@@ -16,9 +18,9 @@ export default function NewPostPage() {
         },
         body: JSON.stringify({ topic }),
       })
-  
+
       const data = await response.json()
-  
+
       if (response.ok && data.content) {
         console.log('✅ Blog Generated Successfully')
         setContent(data.content)
@@ -31,7 +33,39 @@ export default function NewPostPage() {
       setContent('⚠️ Something went wrong while calling the API.')
     }
   }
-  
+
+  const handlePublish = async () => {
+    setStatus('Publishing...')
+
+    try {
+      const response = await fetch('/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: topic,
+          content,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        console.log('✅ Post saved to database')
+        setStatus('✅ Post published successfully!')
+        // Optional: clear inputs after publishing
+        setTopic('')
+        setContent('')
+      } else {
+        console.warn('⚠️ Failed to publish post:', data)
+        setStatus('❌ Failed to publish post.')
+      }
+    } catch (error) {
+      console.error('❌ Error publishing post:', error)
+      setStatus('❌ Error publishing post.')
+    }
+  }
 
   return (
     <>
@@ -58,7 +92,18 @@ export default function NewPostPage() {
         {content && (
           <div className="mt-8 p-6 bg-white rounded shadow">
             <h2 className="text-xl font-semibold text-indigo-700 mb-2">Generated Content</h2>
-            <p className="text-gray-800 whitespace-pre-line">{content}</p>
+            <p className="text-gray-800 whitespace-pre-line mb-4">{content}</p>
+
+            <button
+              onClick={handlePublish}
+              className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+            >
+              Publish Post
+            </button>
+
+            {status && (
+              <p className="mt-4 text-sm text-gray-600">{status}</p>
+            )}
           </div>
         )}
       </main>
