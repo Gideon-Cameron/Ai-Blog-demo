@@ -44,7 +44,7 @@ export default function NewPostPage() {
           type="text"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          placeholder="e.g. How AI is changing education"
+          placeholder="e.g. How AI is changing education."
           className="w-full border rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
