@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { topic } = req.body
 
   if (!topic || typeof topic !== 'string') {
-    return res.status(400).json({ message: 'Invalid topic' })
+    return res.status(400).json({ message: 'Invalid topic.' })
   }
 
   try {
@@ -34,6 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     const blogContent = completion.choices[0]?.message?.content
+    console.log('🔍 Generated blog content:', blogContent)
     res.status(200).json({ content: blogContent })
   } catch (error) {
     console.error('❌ OpenAI error:', error)
