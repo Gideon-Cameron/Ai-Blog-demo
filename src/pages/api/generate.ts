@@ -38,6 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json({ content: blogContent })
   } catch (error) {
     console.error('❌ OpenAI error:', error)
-    res.status(500).json({ message: 'Failed to generate blog content' })
+    res.status(500).json({ message: 'Failed to generate blog content.' })
   }
 }
